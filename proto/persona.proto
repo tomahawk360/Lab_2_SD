@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package grpc;
+
+option go_package = "github.com/tomahawk360/lab2sd/persona";
+
+message Persona {
+    string nombre = 1;
+    string apellido = 2;
+}
+
+message SubirPersonaReq {
+    Persona persona = 1;
+    string estado = 2;
+}
+
+message SubirPersonaRes {}
+
+message GuardarPersonaReq {
+    int64 id = 1;
+    Persona persona = 2;
+}
+
+message GuardarPersonaRes {}
+
+message BajarPersonaReq {
+    string estado = 1;
+}
+
+message BajarPersonaRes {
+    repeated Persona persona = 1;
+}
+
+message ObtenerPersonaReq {
+    int64 id = 1;
+}
+
+message ObtenerPersonaRes {
+    Persona persona = 1;
+}
+
+service PersonaService {
+    rpc Subir(SubirPersonaReq) returns (SubirPersonaRes);
+    rpc Guardar(GuardarPersonaReq) returns (GuardarPersonaRes);
+    rpc Bajar(BajarPersonaReq) returns (BajarPersonaRes);
+    rpc Obtener(stream ObtenerPersonaReq) returns (stream ObtenerPersonaRes);
+}
