@@ -11,7 +11,7 @@ message Persona {
 
 message SubirPersonaReq {
     Persona persona = 1;
-    string estado = 2;
+    bool estado = 2;
 }
 
 message SubirPersonaRes {}
@@ -24,7 +24,7 @@ message GuardarPersonaReq {
 message GuardarPersonaRes {}
 
 message BajarPersonaReq {
-    string estado = 1;
+    bool estado = 1;
 }
 
 message BajarPersonaRes {

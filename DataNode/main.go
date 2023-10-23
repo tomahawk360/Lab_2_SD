@@ -20,7 +20,7 @@ type server struct {
 
 // utils
 func WriteText(data string) {
-	file, err_a := os.OpenFile("DateNode/data.txt", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	file, err_a := os.OpenFile("DATA.txt", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err_a != nil {
 		fmt.Printf("Error al abrir el archivo: %s/n", err_a)
 		return
@@ -36,13 +36,13 @@ func WriteText(data string) {
 }
 
 func ReadLineText(id int) (string, string) {
-	content, err := os.ReadFile("DateNode/data.txt")
+	content, err := os.ReadFile("DATA.txt")
 	if err != nil {
 		fmt.Printf("Error al leer el archivo de entrada: %s/n", err)
 		return "", ""
 	}
 
-	temp := strings.Split(string(content), "/n")
+	temp := strings.Split(string(content), "\n")
 
 	for i := 0; i < len(temp); i++ {
 		temp_2 := strings.Split(string(temp[i]), " ")
@@ -64,6 +64,8 @@ func (s *server) Guardar(ctx context.Context, req *pb.GuardarPersonaReq) (*pb.Gu
 	temp := strconv.FormatInt(persona_id, 10) + " " + persona_nombre + " " + persona_apellido
 	WriteText(temp)
 
+	fmt.Printf("Solicitud de NameNode recibida, mensaje enviado: {}\n")
+
 	return &pb.GuardarPersonaRes{}, nil
 }
 
@@ -74,7 +76,7 @@ func (s *server) Obtener(srv pb.PersonaService_ObtenerServer) error {
 			return nil
 		}
 		if err_r != nil {
-			fmt.Printf("Error al recibir en Obtener del lado servidor: %s", err_r)
+			fmt.Printf("Error al recibir en Obtener del lado servidor: %s\n", err_r)
 			return nil
 		}
 
@@ -88,7 +90,7 @@ func (s *server) Obtener(srv pb.PersonaService_ObtenerServer) error {
 				Apellido: persona_apellido,
 			},
 		}); err_s != nil {
-			fmt.Printf("Error al enviar en Obtener del lado servidor: %s", err_s)
+			fmt.Printf("Error al enviar en Obtener del lado servidor: %s\n", err_s)
 			return nil
 		}
 	}
@@ -105,6 +107,8 @@ func main() {
 	serv := grpc.NewServer()
 
 	pb.RegisterPersonaServiceServer(serv, &server{})
+
+	fmt.Printf("DataNode listo!\n")
 
 	if err_s := serv.Serve(listener); err_s != nil {
 		fmt.Printf("Error al inicializar el server: %s\n", err_s)
